@@ -10,10 +10,10 @@
     <packaging>pom</packaging>
     <modules>
         <module>demo-coupon</module>
-        <module>demo-coupon</module>
-        <module>demo-coupon</module>
-        <module>demo-coupon</module>
-        <module>demo-coupon</module>
+        <module>demo-member</module>
+        <module>demo-order</module>
+        <module>demo-product</module>
+        <module>demo-ware</module>
     </modules>
 
 </project>
