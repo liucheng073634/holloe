@@ -14,10 +14,7 @@ class GulimallThirdApplicationTests {
 	OSS ossClient;
 	@Test
 	void test() throws Exception {
-      /* String endpoint = "oss-cn-hangzhou.aliyuncs.com";
-       String accessKeyId = "LTAI5tMojnJCwYBBhvcg8g67";
-       String accessKeySecret = "7EkRWJlxhOIayIO9qKzi3h5BUFmlr0";
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);*/
+     
 		InputStream inputStream = new FileInputStream("/Users/liuchengdediannao/Desktop/Src/背景/11.jpeg");
 		ossClient.putObject("web-tiase", "13.jpeg", inputStream);
 		ossClient.shutdown();
