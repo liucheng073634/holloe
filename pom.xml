@@ -18,6 +18,10 @@
         <module>gulimall-ware</module>
         <module>gulimall-commo</module>
         <module>gulimall-coupon</module>
+        <module>gulimall-gateway</module>
+        <module>gulimall-third</module>
+
+
 
     </modules>
     <parent>
@@ -78,6 +82,8 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
 
+
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -93,6 +99,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
 
     </dependencies>
 

@@ -89,17 +89,17 @@
   export default {
     data () {
       return {
-        dataForm: {
-          key: ''
-        },
-        dataList: [],
-        pageIndex: 1,
-        pageSize: 10,
-        totalPage: 0,
-        dataListLoading: false,
-        dataListSelections: [],
-        addOrUpdateVisible: false
-      }
+
+      }  dataForm: {
+        key: ''
+      },
+      dataList: [],
+          pageIndex: 1,
+          pageSize: 10,
+          totalPage: 0,
+          dataListLoading: false,
+          dataListSelections: [],
+          addOrUpdateVisible: false
     },
     components: {
       AddOrUpdate

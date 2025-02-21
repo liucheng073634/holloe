@@ -13,10 +13,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class RenrenApplication {
+public class RenrenAppfastlication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RenrenApplication.class, args);
+		System.setProperty("java.awt.headless", "true");
+		SpringApplication.run(RenrenAppfastlication.class, args);
+
 	}
 
 }
