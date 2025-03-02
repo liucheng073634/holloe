@@ -5,6 +5,7 @@ import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +29,16 @@ import com.atguigu.common.utils.R;
 @RestController
 @RequestMapping("product/spucomment")
 public class SpuCommentController {
+    @Value("${properties.user.name}")
+    private String name;
+
     @Autowired
     private SpuCommentService spuCommentService;
+
+    @RequestMapping("/test")
+    public R test(){
+        return R.ok().put("name",name);
+    }
 
     /**
      * 列表

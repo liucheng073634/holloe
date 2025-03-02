@@ -20,6 +20,8 @@
         <module>gulimall-coupon</module>
         <module>gulimall-gateway</module>
         <module>gulimall-third</module>
+        <module> gulimall-search</module>
+
 
 
 
@@ -40,7 +42,7 @@
         <spring-cloud.version>2021.0.3</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
-        <hutool.version>5.8.11</hutool.version>
+
         <mysql.version>8.0.23</mysql.version>
     </properties>
 
@@ -48,11 +50,7 @@
     <dependencyManagement>
         <dependencies>
             <!--hutool工具包-->
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>${hutool.version}</version>
-            </dependency>
+
             <!--spring cloud-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
