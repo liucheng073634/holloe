@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.atguigu.gulimall.ware.dao")
 @Configuration
 public class WareMyBatisConfig {
+    // 引入分页插件
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
@@ -24,7 +25,6 @@ public class WareMyBatisConfig {
     }
     @Bean
     public MergeVo mergeVo() {
-
         return  new MergeVo();
     }
 

@@ -10,18 +10,28 @@ import lombok.extern.slf4j.Slf4j;
 
 
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.Arrays;
 import java.util.List;
 @Slf4j
 @SpringBootTest
+
 class GulimallProductApplicationTests {
     @Autowired
     BrandService brandService;
     @Autowired
     CategoryService categoryService;
+
+
+    @Autowired
+    RedissonClient redissonClient;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
 
     @Test
     void contextLoads() {
@@ -39,7 +49,20 @@ class GulimallProductApplicationTests {
         Long[] path = categoryService.findCatelogPath(226L);
         log.info( "完整路径：{}", Arrays.toString(path));
     }
+    @Test
+    void testRedisTemplate() {
+        redisTemplate.opsForValue().set("hello","world");
+        String hello = redisTemplate.opsForValue().get("hello");
+        System.out.println("redisTemplate.opsForValue().get(\"hello\") = " + hello);
+    }
 
-
+    @Test
+    void testRedisson() {
+        System.out.println(redissonClient);
+    }
+        @Test
+    void testRedisson2() {
+        System.out.println("你好");
+    }
 
 }

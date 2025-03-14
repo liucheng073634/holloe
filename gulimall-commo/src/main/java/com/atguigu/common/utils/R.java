@@ -8,8 +8,14 @@
 
 package com.atguigu.common.utils;
 
+import cn.hutool.core.lang.TypeReference;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
+import netscape.javascript.JSObject;
 import org.apache.http.HttpStatus;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +26,11 @@ import java.util.Map;
  */
 public class R extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
-	
+	public R setData(Object data){
+	put("data", data);
+	return this;
+	}
+
 	public R() {
 		put("code", 0);
 		put("msg", "success");
@@ -64,4 +74,20 @@ public class R extends HashMap<String, Object> {
 	public Integer getCode() {
 		return (Integer) this.get("code");
 	}
+
+	public <T> T getData(TypeReference<T> typeReference ) {
+		Object data = get("data");
+		String jsonStr = JSONUtil.toJsonStr(data);
+		T t = JSON.parseObject(jsonStr, typeReference);
+		return t;
+	}
+
+	public <T> T getData(String key,TypeReference<T> typeReference ) {
+		Object data = get(key);
+		String jsonStr = JSONUtil.toJsonStr(data);
+		T t = JSON.parseObject(jsonStr, typeReference);
+		return t;
+	}
+
+
 }
