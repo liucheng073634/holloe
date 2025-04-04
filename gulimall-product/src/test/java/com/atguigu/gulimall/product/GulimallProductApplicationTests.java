@@ -2,9 +2,14 @@ package com.atguigu.gulimall.product;
 
 
 
+import com.atguigu.gulimall.product.dao.AttrGroupDao;
 import com.atguigu.gulimall.product.entity.BrandEntity;
+import com.atguigu.gulimall.product.service.AttrGroupService;
 import com.atguigu.gulimall.product.service.BrandService;
 import com.atguigu.gulimall.product.service.CategoryService;
+import com.atguigu.gulimall.product.service.SkuSaleAttrValueService;
+import com.atguigu.gulimall.product.vo.SkuItemSaleAttrVo;
+import com.atguigu.gulimall.product.vo.SpuItemAttrGroupVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +37,13 @@ class GulimallProductApplicationTests {
 
     @Autowired
     StringRedisTemplate redisTemplate;
+
+    @Autowired
+    AttrGroupDao attrGroupDao;
+
+    @Autowired
+    SkuSaleAttrValueService skuSaleAttrValueService;
+
 
     @Test
     void contextLoads() {
@@ -64,5 +76,19 @@ class GulimallProductApplicationTests {
     void testRedisson2() {
         System.out.println("你好");
     }
+
+    @Test
+    void testAttrGroup() {
+        List<SpuItemAttrGroupVo> attrGroupWithAttrsBySpuId = attrGroupDao.getAttrGroupWithAttrsBySpuId(27L, 225L);
+        System.out.println(attrGroupWithAttrsBySpuId);
+    }
+
+
+    @Test
+    void testAttrGroup2() {
+        List<SkuItemSaleAttrVo> saleAttrsBySpuId = skuSaleAttrValueService.getSaleAttrsBySpuId(24L);
+        System.out.println(saleAttrsBySpuId);
+    }
+
 
 }

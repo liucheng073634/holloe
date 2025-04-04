@@ -1,6 +1,6 @@
 package com.atguigu.gulimall.product.service.impl;
 
-import cn.hutool.core.lang.TypeReference;
+import com.alibaba.fastjson.TypeReference;
 import com.atguigu.common.constant.ProductConstant;
 import com.atguigu.common.to.MemberPrice;
 import com.atguigu.common.to.SkuReductionTo;
@@ -134,13 +134,14 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 skuInfoEntity.setSpuId(spuInfoEntity.getId());
                 skuInfoEntity.setSkuDefaultImg(defaultImg);
                 skuInfoService.saveSkuInfo(skuInfoEntity);
-                Long spuId = skuInfoEntity.getSpuId();
+                Long skuId = skuInfoEntity.getSkuId();
+
 
 
 
                 List<SkuImagesEntity> collect1 = item.getImages().stream().map((img) -> {
                     SkuImagesEntity skuImagesEntity = new SkuImagesEntity();
-                    skuImagesEntity.setSkuId(spuId);
+                    skuImagesEntity.setSkuId(skuId);
                     skuImagesEntity.setImgUrl(img.getImgUrl());
                     skuImagesEntity.setDefaultImg(img.getDefaultImg());
                     return skuImagesEntity;
@@ -156,14 +157,14 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 List<SkuSaleAttrValueEntity> collect2 = attr.stream().map((a) -> {
                     SkuSaleAttrValueEntity skuSaleAttrValueEntity = new SkuSaleAttrValueEntity();
                     BeanUtils.copyProperties(a, skuSaleAttrValueEntity);
-                    skuSaleAttrValueEntity.setSkuId(spuId);
+                    skuSaleAttrValueEntity.setSkuId(skuId);
                     return skuSaleAttrValueEntity;
                 }).collect(Collectors.toList());
                 skuSaleAttrValueService.saveBatch(collect2);
 
                 SkuReductionTo skuReductionTo = new SkuReductionTo();
                 BeanUtils.copyProperties(item,skuReductionTo);
-                skuReductionTo.setSkuId(spuId);
+                skuReductionTo.setSkuId(skuId);
 
 
                 skuReductionTo.setMemberPrice(item.getMemberPrice());
@@ -252,9 +253,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         Map<Long, Boolean> stokMap=null;
         try{
             R r = wareFeignService.getSkusHasStock(skuIds);
-            TypeReference<List<SkuHasStockVo>> typeReference = new TypeReference<List<SkuHasStockVo>>() {
-            };
-            stokMap = r.getData(typeReference).stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, SkuHasStockVo::getHasStock));
+
+            stokMap = r.getData(new TypeReference<List<SkuHasStockVo>>() {}).stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, SkuHasStockVo::getHasStock));
         }catch (Exception e){
             log.error("库存服务查询异常：原因{}",e);
 

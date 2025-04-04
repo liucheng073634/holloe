@@ -9,6 +9,7 @@ import com.atguigu.gulimall.search.config.GulimallElasticSearchConfig;
 import com.atguigu.gulimall.search.constant.EsConstant;
 import com.atguigu.gulimall.search.feign.ProductFeignService;
 import com.atguigu.gulimall.search.service.MallSearchService;
+import com.atguigu.gulimall.search.vo.BrandVo;
 import com.atguigu.gulimall.search.vo.SearchParam;
 import com.atguigu.gulimall.search.vo.SearchResult;
 import lombok.extern.slf4j.Slf4j;
@@ -49,13 +50,14 @@ public class MallSearchServiceImpl implements MallSearchService {
 
     @Autowired
     ProductFeignService productFeignService;
-
+    // 搜索
     @Override
     public SearchResult search(SearchParam param) {
         SearchResult result=null;
-
+        // 准备检索请求
         SearchRequest searchResult = buildSearchRequrest(param);
         try {
+            // 执行检索
             SearchResponse search = client.search(searchResult, GulimallElasticSearchConfig.COMMON_OPTIONS);
         result=buildSearchResult(search,param);
         } catch (Exception e) {
@@ -192,12 +194,29 @@ public class MallSearchServiceImpl implements MallSearchService {
                 return navVo;
             }).collect(Collectors.toList());
             request.setNavs(navVos);
-
             //查询所有品牌
-
         }
-
-
+// 品牌、分类
+       /* if(param.getBrandId() != null && param.getBrandId().size() > 0){
+            List<SearchResult.NavVo> navs = request.getNavs();
+            SearchResult.NavVo navVo = new SearchResult.NavVo();
+            navVo.setNavName("品牌");
+            // TODO 远程查询所有品牌
+            R r = productFeignService.brandInfo(param.getBrandId());
+            if(r.getCode() == 0){
+                List<BrandVo> brand = r.getData("data", new TypeReference<List<BrandVo>>() {});
+                StringBuffer buffer = new StringBuffer();
+                // 替换所有品牌ID
+                String replace = "";
+                for (BrandVo brandVo : brand) {
+                    buffer.append(brandVo.getBrandName() + ";");
+                    replace = getString(param, brandVo.getBrandId() + "", "brandId");
+                }
+                navVo.setNavValue(buffer.toString());
+                navVo.setLink("http://search.glmall.com/list.html?" + replace);
+            }
+            navs.add(navVo);
+        }*/
 
         return request;
     }

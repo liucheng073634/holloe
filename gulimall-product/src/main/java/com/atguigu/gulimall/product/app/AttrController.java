@@ -76,7 +76,7 @@ public class AttrController {
      * 信息
      */
 
-    @Cacheable( value = {"attr"},key = "'attrinfo:'+#root.args[0]")
+
     @RequestMapping("/info/{attrId}")
     //@RequiresPermissions("product:attr:info")
 

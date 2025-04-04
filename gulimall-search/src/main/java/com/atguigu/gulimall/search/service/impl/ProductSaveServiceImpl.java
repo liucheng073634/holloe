@@ -28,6 +28,7 @@ public class ProductSaveServiceImpl implements ProductSaveService {
     @Override
     // 上架商品
     public boolean productStatusUp(List<SkuEsModel> skuEsModels) throws IOException {
+        // 1. 给es中建立索引，product，建立好映射关系
         BulkRequest bulkRequest = new BulkRequest();
        for (SkuEsModel skuEsModel : skuEsModels){
            IndexRequest indexRequest = new IndexRequest(EsConstant.PRODUCT_INDEX);
@@ -37,7 +38,7 @@ public class ProductSaveServiceImpl implements ProductSaveService {
            bulkRequest.add(indexRequest);
        }
 
-
+        // 批量执行
         BulkResponse bulk = restHighLevelClient.bulk(bulkRequest, GulimallElasticSearchConfig.COMMON_OPTIONS);
         boolean b = bulk.hasFailures();
         List<String> collect = Arrays.stream(bulk.getItems()).map(BulkItemResponse::getId).collect(Collectors.toList());

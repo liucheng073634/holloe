@@ -1,6 +1,7 @@
 package com.atguigu.gulimall.product.app;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -19,6 +20,7 @@ import com.atguigu.gulimall.product.entity.BrandEntity;
 import com.atguigu.gulimall.product.service.BrandService;
 import com.atguigu.common.utils.PageUtils;
 import com.atguigu.common.utils.R;
+import springfox.documentation.annotations.Cacheable;
 
 
 /**
@@ -53,6 +55,14 @@ public class BrandController {
     //@RequiresPermissions("product:brand:info")
     public R info(@PathVariable("brandId") Long brandId){
 		BrandEntity brand = brandService.getById(brandId);
+
+        return R.ok().put("brand", brand);
+    }
+
+    @RequestMapping("/infos")
+    //@RequiresPermissions("product:brand:info")
+    public R brandInfo(@RequestParam("brandIds") List<Long> brandId){
+        List<BrandEntity> brand = brandService.getBrandsByIds(brandId);
 
         return R.ok().put("brand", brand);
     }

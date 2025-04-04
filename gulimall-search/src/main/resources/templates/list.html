@@ -64,10 +64,12 @@
         </b>
         <ul>
             <li>
-                <a href="http://auth.gulimall.com/login.html" class="li_2">你好，[[${session.loginUser==null?"请登录":session.loginUser.nickname}]]</a>
+                <a th:if="${session.loginUser!=null}">欢迎：[[${session.loginUser==null?'':session.loginUser.nickname}]]</a>
+                <a href="http://auth.gulimall.com/login.html" th:if="${session.loginUser==null}">欢迎,请登录</a>
             </li>
             <li>
-                <a href="http://auth.gulimall.com/reg.html">免费注册</a>
+                <a th:if="${session.loginUser==null}" href="http://auth.gulimall.com/reg.html" class="li_2">免费注册</a>
+
             </li>
             <span>|</span>
             <li>
@@ -407,7 +409,7 @@
     </div>
     <div class="header_ico">
         <div class="header_gw">
-            <span><a href="#">我的购物车</a></span>
+            <span><a href="http://cart.gulimall.com/cart.html">我的购物车</a></span>
             <img src="/static/search/image/settleup-@1x.png" />
             <span>0</span>
         </div>
@@ -1950,7 +1952,14 @@
     <!--替换网址相关函数-->
     <!--搜索框-->
     function searchByKeyword() {
-        location.href = replaceParamVal(location.href,"keyword", $("#keyword_input").val(),false);
+
+       let a =$("#keyword_input").val()
+        if (a==""){
+            location.href = replaceParamVal(location.href,"keyword", "手机",false);
+        }else{
+            location.href = replaceParamVal(location.href,"keyword", a,false);
+        }
+
     };
 
     function searchProducts(name, value) {
