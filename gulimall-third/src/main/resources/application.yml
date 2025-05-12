@@ -8,12 +8,7 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
-    alicloud:
-      access-key: LTAI5tPGHd4Fx1iBmJaazHFe
-      secret-key:  vHKaTIkiiQABFNRoqILiteZ4UqrpWc
-      oss:
-        bucket: web-tiase
-        endpoint: oss-cn-hangzhou.aliyuncs.com
+
 #      # 发送短信接口的配置
 #      sms:
 #        host: http://dingxin.market.alicloudapi.com
