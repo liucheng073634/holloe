@@ -1,5 +1,6 @@
 package com.atguigu.gulimall.product.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.atguigu.common.utils.PageUtils;
 import com.atguigu.gulimall.product.entity.SpuImagesEntity;
@@ -19,5 +20,8 @@ public interface SpuImagesService extends IService<SpuImagesEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     void saveImages(Long id, List<String> images);
+
+
+    void remove(Long spuId);
 }
 

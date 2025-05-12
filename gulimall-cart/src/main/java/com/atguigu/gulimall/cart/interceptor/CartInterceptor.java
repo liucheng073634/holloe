@@ -42,6 +42,7 @@ public class CartInterceptor implements HandlerInterceptor {
 
                 userInfoTo.setUserKey(UUID.randomUUID().toString());
             }
+        System.out.println("dawdwd"+userInfoTo);
 
         threadLocal.set(userInfoTo);
         return true;

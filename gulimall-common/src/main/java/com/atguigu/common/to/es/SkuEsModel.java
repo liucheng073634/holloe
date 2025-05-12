@@ -1,5 +1,6 @@
 package com.atguigu.common.to.es;
 
+import com.atguigu.common.to.Attrs;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -22,12 +23,7 @@ public class SkuEsModel {
     private  String catalogName;
     private List<Attrs> attrs;
 
-    @Data
-   public  static class Attrs{
-        private Long attrId;
-        private String attrName;
-        private String attrValue;
-    }
+
 
 
 

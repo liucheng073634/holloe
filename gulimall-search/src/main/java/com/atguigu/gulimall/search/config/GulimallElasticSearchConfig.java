@@ -16,6 +16,7 @@ import java.io.IOException;
 
 @Configuration
 public class GulimallElasticSearchConfig {
+    // 请求头
     public static final RequestOptions COMMON_OPTIONS ;
 
     static {
@@ -38,7 +39,7 @@ public class GulimallElasticSearchConfig {
     public RestHighLevelClient client(){
         return new RestHighLevelClient(RestClient.builder(
                 new HttpHost(
-                        "10.211.55.16",
+                        "127.0.0.1",
                         9200,
                         "http"
                 )

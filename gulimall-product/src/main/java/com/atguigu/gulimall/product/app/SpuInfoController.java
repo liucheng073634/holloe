@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 
+import com.atguigu.gulimall.product.entity.SkuInfoEntity;
 import com.atguigu.gulimall.product.vo.SpuSaveVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +29,17 @@ public class SpuInfoController {
     @Autowired
     private SpuInfoService spuInfoService;
 
+
     @PostMapping("/{spuId}/up")
     public R spuUp(@PathVariable("spuId") Long spuId){
-        spuInfoService.up(spuId);
+        SpuInfoEntity byId = spuInfoService.getById(spuId);
+        if(byId.getPublishStatus()==0) {
+            spuInfoService.up(spuId);
+        }else{
+            spuInfoService.upPublishStatus(spuId);
+        }
+
+
         return R.ok();
     }
 
@@ -83,12 +92,19 @@ public class SpuInfoController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @RequestMapping("/{spuId}/delete")
     //@RequiresPermissions("product:spuinfo:delete")
-    public R delete(@RequestBody Long[] ids){
-		spuInfoService.removeByIds(Arrays.asList(ids));
+    public R delete(@PathVariable("spuId") Long spuId){
+		spuInfoService.removeSpuInfo(spuId);
 
         return R.ok();
     }
+
+    @GetMapping("/skuId/{skuId}")
+    public R getSkuInfo(@PathVariable("skuId") Long skuId){
+        SpuInfoEntity spuInfoEntity = spuInfoService.SpuInfoById(skuId);
+        return R.ok().put("data",spuInfoEntity);
+    }
+
 
 }

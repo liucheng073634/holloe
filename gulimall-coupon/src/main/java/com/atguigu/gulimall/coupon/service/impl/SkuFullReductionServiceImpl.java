@@ -75,4 +75,9 @@ public class SkuFullReductionServiceImpl extends ServiceImpl<SkuFullReductionDao
 
     }
 
+    @Override
+    public void deleteReduction(List<Long> skuId) {
+        this.baseMapper.deleteReduction(skuId);
+    }
+
 }

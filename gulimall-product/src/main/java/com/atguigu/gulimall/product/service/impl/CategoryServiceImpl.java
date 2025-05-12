@@ -43,10 +43,9 @@ import org.thymeleaf.util.StringUtils;
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
 
     @Autowired
-    CategoryBrandRelationService categoryBrandRelationService;
+    private StringRedisTemplate redisTemplate;
 
-    @Autowired
-    StringRedisTemplate redisTemplate;
+
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -107,7 +106,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     @Override
     public void updateCascade(CategoryEntity category) {
         this.updateById(category);
-        categoryBrandRelationService.updateByIdeCategory(category.getCatId(),category.getName());
+
     }
 
 
@@ -129,19 +128,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     @Cacheable(value = {"category"},key = "#root.method.name",sync = true)
-    public Map<String, List<Catelog2Vo>> getCatelogJson(){
-
+    public Map<String, List<Catelog2Vo>> getCatelogJson() {
         String catelogJson = redisTemplate.opsForValue().get("catelogJson");
-        if(StringUtils.isEmpty(catelogJson)){
+        if (StringUtils.isEmpty(catelogJson)) {
             System.out.println("缓存不命中...将要查数据库");
-            Map <String, List<Catelog2Vo>> catelogJsonDb = getCatelogJsonDbRedisLock();
-
+            Map<String, List<Catelog2Vo>> catelogJsonDb = getCatelogJsonDbRedisLock();
             return catelogJsonDb;
         }
         System.out.println("命中缓存");
         // 从redis中获取到数据,序列化
-        Map<String, List<Catelog2Vo>> result= JSON.parseObject(catelogJson, new TypeReference<>() {
-        });
+        Map<String, List<Catelog2Vo>> result = JSON.parseObject(catelogJson, new TypeReference<>() {});
         return result;
     }
 
@@ -185,6 +181,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
 
+    // redis分布式锁
     private Map<String, List<Catelog2Vo>> getStringListMap() {
         //得到锁后，去查缓存
         String catelogJson = redisTemplate.opsForValue().get("catelogJson");

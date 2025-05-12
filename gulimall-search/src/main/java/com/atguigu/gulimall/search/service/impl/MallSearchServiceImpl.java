@@ -58,7 +58,7 @@ public class MallSearchServiceImpl implements MallSearchService {
         SearchRequest searchResult = buildSearchRequrest(param);
         try {
             // 执行检索
-            SearchResponse search = client.search(searchResult, GulimallElasticSearchConfig.COMMON_OPTIONS);
+            SearchResponse search = client.search(searchResult,GulimallElasticSearchConfig.COMMON_OPTIONS);
         result=buildSearchResult(search,param);
         } catch (Exception e) {
 

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,8 +82,8 @@ public class SpuBoundsController {
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("coupon:spubounds:delete")
-    public R delete(@RequestBody Long[] ids){
-		spuBoundsService.removeByIds(Arrays.asList(ids));
+    public R delete(@RequestBody Long id){
+        spuBoundsService.remove(id);
 
         return R.ok();
     }

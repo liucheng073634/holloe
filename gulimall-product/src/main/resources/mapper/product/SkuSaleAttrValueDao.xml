@@ -22,6 +22,12 @@
         </collection>
 
     </resultMap>
+    <delete id="deleteBySkuId">
+        DELETE FROM `pms_sku_sale_attr_value` WHERE sku_id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
     <select id="getSaleAttrsBySpuId" resultMap="SkuItemSaleAttrVo">
         SELECT
             ssav.`attr_id` attr_id,

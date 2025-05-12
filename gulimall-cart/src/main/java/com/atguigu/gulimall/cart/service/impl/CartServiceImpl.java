@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class CartServiceImpl implements CartService {
+    
     @Autowired
     StringRedisTemplate redisTemplate;
     @Autowired
@@ -38,6 +40,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartItem addToCart(Long skuId, Integer num) {
+        // 1.先查询redis中购物车数据
         BoundHashOperations<String, Object, Object> cartOps = getCartOps();
         String o = (String)cartOps.get(skuId.toString());
 
@@ -57,7 +60,7 @@ public class CartServiceImpl implements CartService {
                     cartItem.setPrice(skuInfo.getPrice());
                 },executor);
 
-
+                    // 远程查询当前sku的组合信息
                 CompletableFuture<Void> voidCompletableFuture2 = CompletableFuture.runAsync(() ->{
                     List<String> skuSaleAttrValues = productFeignService.getSkuSaleAttrValues(skuId);
                     cartItem.setSkuAttr(skuSaleAttrValues);
@@ -68,6 +71,7 @@ public class CartServiceImpl implements CartService {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+                /// 添加到redis
                 cartOps.put( skuId.toString(), JSON.toJSONString(cartItem));
                 return cartItem;
             } else {
@@ -132,6 +136,7 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    // 选中状态
     @Override
     public void checkItem(Long skuId, Integer check) {
         BoundHashOperations<String, Object, Object> cartOps = getCartOps();
@@ -139,6 +144,14 @@ public class CartServiceImpl implements CartService {
         cartItem.setCheck(check==1?true:false);
         String jsonString = JSON.toJSONString(cartItem);
         cartOps.put(skuId.toString(),jsonString);
+    }
+
+    @Override
+    public void checkItemCount(Long skuId, Integer num) {
+        CartItem cartItem = getCartItem(skuId);
+        cartItem.setCount(num);
+        BoundHashOperations<String, Object, Object> cartOps = getCartOps();
+        cartOps.put(skuId.toString(),JSON.toJSONString(cartItem));
     }
 
     private BoundHashOperations<String, Object, Object> getCartOps() {
@@ -154,6 +167,7 @@ public class CartServiceImpl implements CartService {
     return  operations;
     }
 
+    // 获取到redis中购物车数据
     private List<CartItem> getCartItems(String cartKey) {
         BoundHashOperations<String, Object, Object> operations = redisTemplate.boundHashOps(cartKey);
         List<Object> values = operations.values();
@@ -165,5 +179,32 @@ public class CartServiceImpl implements CartService {
             return collect;
         }
         return null;
+    }
+    public void deleteItem(Long skuId) {
+        BoundHashOperations<String, Object, Object> cartOps = getCartOps();
+        cartOps.delete(skuId.toString());
+    }
+
+    @Override
+    public List<CartItem> getUserCartItems() {
+        UserInfoTo userInfoTo = CartInterceptor.threadLocal.get();
+        String cartKey = CART_PREFIX+userInfoTo.getUserId();
+        if(userInfoTo.getUserId()==null) {
+        return null;
+        }else{
+            List<CartItem> cartItems = getCartItems(cartKey);
+            List<CartItem> collect = cartItems.stream()
+             .filter(item -> item.getCheck())
+                    .map(item -> {
+                        //TODO 远程查询商品信息，得到价格，更新价格
+                        R price = productFeignService.getPrice(item.getSkuId());
+                        String string = (String) price.get("data");
+                        item.setPrice(new BigDecimal(string));
+                        return item;
+                    }).collect(Collectors.toList());
+
+         return collect;
+        }
+
     }
 }

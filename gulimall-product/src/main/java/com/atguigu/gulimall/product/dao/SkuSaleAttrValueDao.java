@@ -2,6 +2,7 @@ package com.atguigu.gulimall.product.dao;
 
 import com.atguigu.gulimall.product.entity.SkuSaleAttrValueEntity;
 import com.atguigu.gulimall.product.vo.SkuItemSaleAttrVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,4 +22,7 @@ public interface SkuSaleAttrValueDao extends BaseMapper<SkuSaleAttrValueEntity> 
     List<SkuItemSaleAttrVo> getSaleAttrsBySpuId(@Param("spuId") Long spuId);
 
     List<String> getSkuSaleAttrValues(@Param("skuId") Long skuId);
+
+
+    void deleteBySkuId(List<Long> bySkuId);
 }

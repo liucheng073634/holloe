@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
@@ -24,6 +26,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
     @Autowired
     private RedisConnectionFactory factory;
+
+    @Bean
+    public RedisSerializer<Object> springSessionDefaultRedisSerializer(){
+        return new GenericJackson2JsonRedisSerializer();
+    }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {

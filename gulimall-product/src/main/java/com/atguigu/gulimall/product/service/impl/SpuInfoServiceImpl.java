@@ -2,6 +2,7 @@ package com.atguigu.gulimall.product.service.impl;
 
 import com.alibaba.fastjson.TypeReference;
 import com.atguigu.common.constant.ProductConstant;
+import com.atguigu.common.to.Attrs;
 import com.atguigu.common.to.MemberPrice;
 import com.atguigu.common.to.SkuReductionTo;
 import com.atguigu.common.to.SpuBoundTo;
@@ -13,6 +14,7 @@ import com.atguigu.gulimall.product.feign.SearchFeignService;
 import com.atguigu.gulimall.product.feign.WareFeignService;
 import com.atguigu.gulimall.product.service.*;
 import com.atguigu.gulimall.product.vo.*;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,13 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         return new PageUtils(page);
     }
 
+    // 保存spu信息
+
+    /**
+     * 这里高并发不高可以用@GlobalTransactional 的AT模式
+     * @param vo
+     */
+    @GlobalTransactional
     @Transactional
     @Override
     public void saveSpuInfo(SpuSaveVo vo) {
@@ -97,7 +106,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         List<BaseAttrs> baseAttrs = vo.getBaseAttrs();
         List<ProductAttrValueEntity> collect = baseAttrs.stream().map((attr) -> {
             ProductAttrValueEntity productAttrValueEntity = new ProductAttrValueEntity();
-            productAttrValueEntity.setId(attr.getAttrId());
+            productAttrValueEntity.setSpuId(spuInfoEntity.getId());
+            productAttrValueEntity.setAttrId(attr.getAttrId());
             AttrEntity byId = attrService.getById(attr.getAttrId());
             productAttrValueEntity.setAttrName(byId.getAttrName());
             productAttrValueEntity.setAttrValue(attr.getAttrValues());
@@ -111,6 +121,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         SpuBoundTo spuBoundTo = new SpuBoundTo();
         BeanUtils.copyProperties(bounds, spuBoundTo);
         spuBoundTo.setSpuId(spuInfoEntity.getId());
+        //
         R r1 = couponFeignService.saveSpuBounds(spuBoundTo);
         if(r1.getCode()!=0){
             log.error("远程保存spu积分信息出错");
@@ -126,6 +137,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                         defaultImg=image.getImgUrl();
                     }
                 }
+                //保存sku信息
                 SkuInfoEntity skuInfoEntity = new SkuInfoEntity();
                 BeanUtils.copyProperties(item,skuInfoEntity);
                 skuInfoEntity.setBrandId(spuInfoEntity.getBrandId());
@@ -138,7 +150,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
 
 
-
+                //保存sku图片信息
                 List<SkuImagesEntity> collect1 = item.getImages().stream().map((img) -> {
                     SkuImagesEntity skuImagesEntity = new SkuImagesEntity();
                     skuImagesEntity.setSkuId(skuId);
@@ -152,7 +164,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
 
 
-
+                //保存sku销售属性
                 List<Attr> attr = item.getAttr();
                 List<SkuSaleAttrValueEntity> collect2 = attr.stream().map((a) -> {
                     SkuSaleAttrValueEntity skuSaleAttrValueEntity = new SkuSaleAttrValueEntity();
@@ -166,7 +178,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 BeanUtils.copyProperties(item,skuReductionTo);
                 skuReductionTo.setSkuId(skuId);
 
-
+                //远程保存sku优惠信息
                 skuReductionTo.setMemberPrice(item.getMemberPrice());
                 R r = couponFeignService.saveSkReduction(skuReductionTo);
 
@@ -187,6 +199,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         this.baseMapper.insert(spuInfoEntity);
     }
 
+    // 查询spu信息
     @Override
     public PageUtils queryPageByCondition(Map<String, Object> params) {
         QueryWrapper<SpuInfoEntity> wrapper = new QueryWrapper<>();
@@ -239,14 +252,17 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         List<Long> collect = entities.stream().map((attr) -> {
             return attr.getAttrId();
         }).collect(Collectors.toList());
+        //
         List<Long> searchAttrIds = attrService.selectSearchAttrIds(collect);
         Set<Long> idSet = new HashSet<>(searchAttrIds);
 
-        List<SkuEsModel.Attrs> attrsList = entities.stream().filter(attr -> {
+        List<Attrs> attrsList = entities.stream().filter(attr -> {
             return idSet.contains(attr.getAttrId());
         }).map(attr -> {
-            SkuEsModel.Attrs attrs1 = new SkuEsModel.Attrs();
-            BeanUtils.copyProperties(attr, attrs1);
+            Attrs attrs1 = new Attrs();
+            attrs1.setAttrId(attr.getAttrId());
+            attrs1.setAttrName(attr.getAttrName());
+            attrs1.setAttrValue(attr.getAttrValue());
             return attrs1;
         }).collect(Collectors.toList());
         //查询当前sku是否有库存
@@ -267,6 +283,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             esModel.setSkuPrice(sku.getPrice());
             esModel.setSkuImg(sku.getSkuDefaultImg());
             if(finalStoMap==null){
+                // 没有库存
                 esModel.setHasStock(true);
             }else {
                 esModel.setHasStock(finalStoMap.get(sku.getSkuId()));
@@ -300,6 +317,38 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             //TODO 重复调用？接口幂等性
         }
 
+    }
+
+    @Override
+    public void removeSpuInfo(Long spuId) {
+        //删除spu基本信息pms_spu_info
+       /* List<Long> bySkuId = skuInfoService.getBySkuId(spuId);
+        this.baseMapper.deleteById(spuId);
+        spuInfoService.removeById(spuId);
+        spuImagesService.remove(spuId);
+        attrValueService.remove(spuId);
+         couponFeignService.delete(spuId);
+            skuInfoService.remove(spuId);
+            skuImagesService.delete(bySkuId);
+            skuSaleAttrValueService.deleteBySkuId(bySkuId);
+           couponFeignService.deleteReduction(bySkuId);*/
+
+        this.baseMapper.updateSpuStatus(spuId, ProductConstant.StatusEnum.SPU_DOWN.getCode());
+
+
+    }
+
+    @Override
+    public SpuInfoEntity SpuInfoById(Long skuId) {
+        SkuInfoEntity byId = skuInfoService.getById(skuId);
+        Long spuId = byId.getSpuId();
+        SpuInfoEntity byId1 = getById(spuId);
+        return byId1;
+    }
+
+    @Override
+    public void upPublishStatus(Long spuId) {
+        this.baseMapper.updateSpuStatus(spuId, ProductConstant.StatusEnum.SPU_UP.getCode());
     }
 
 

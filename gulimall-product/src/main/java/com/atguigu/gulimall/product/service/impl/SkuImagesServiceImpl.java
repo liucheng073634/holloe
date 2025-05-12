@@ -34,4 +34,9 @@ public class SkuImagesServiceImpl extends ServiceImpl<SkuImagesDao, SkuImagesEnt
         return skuId1;
     }
 
+    @Override
+    public void delete(List<Long> bySkuId) {
+        this.baseMapper.deleteImages(bySkuId);
+    }
+
 }

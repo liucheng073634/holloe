@@ -1,5 +1,6 @@
 package com.atguigu.gulimall.product.service;
 
+import com.atguigu.gulimall.product.entity.SkuInfoEntity;
 import com.atguigu.gulimall.product.entity.SpuInfoDescEntity;
 import com.atguigu.gulimall.product.vo.SpuSaveVo;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -28,5 +29,11 @@ public interface SpuInfoService extends IService<SpuInfoEntity> {
 
 
     void up(Long spuId);
+
+    void removeSpuInfo(Long spuId);
+
+    SpuInfoEntity SpuInfoById(Long skuId);
+
+    void upPublishStatus(Long spuId);
 }
 

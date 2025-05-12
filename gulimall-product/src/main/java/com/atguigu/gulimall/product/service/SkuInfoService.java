@@ -23,8 +23,18 @@ public interface SkuInfoService extends IService<SkuInfoEntity> {
 
     PageUtils queryPageByCondition(Map<String, Object> params);
 
+    /**
+     * @param spuId
+     * @return
+     */
     List<SkuInfoEntity> getSkusBySpuId(Long spuId);
 
     SkuItemVo item(Long skuId);
+
+    void remove(Long spuId);
+
+    List<Long> getBySkuId(Long spuId);
+
+
 }
 

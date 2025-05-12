@@ -35,7 +35,7 @@ public class MemberController {
     private MemberService memberService;
     @Autowired
     private CouponFeignService couponFeignService;
-
+    //  社交登录
     @PostMapping("/oauth2/login")
     R oauthlogin(@RequestBody SocialUser socialUser){
 
@@ -48,7 +48,7 @@ public class MemberController {
 
     }
 
-
+    // 账号登录
     @PostMapping("/login")
     R login(@RequestBody UserMemberVo userMemberVo){
 

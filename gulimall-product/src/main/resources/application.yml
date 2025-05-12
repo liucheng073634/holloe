@@ -1,29 +1,45 @@
-##server:
-#  port: 8000
-#spring:
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://10.211.55.16:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-#    username: root
-#    password: 123
-#  cloud:
-#    nacos:
-#      discovery:
-#        server-addr: 10.211.55.16:8848
-#
-#
-#alibaba:
-#  cloud:
-#    access-key: LTAI5tMojnJCwYBBhvcg8g67
-#    secret-key: 7EkRWJlxhOIayIO9qKzi3h5BUFmlr0
-#    oss:
-#      endpoint: oss-cn-hangzhou.aliyuncs.com
-#
-#  application:
-#    name: gulimall-product
-#mybatis-plus:
-#  mapper-locations: classpath:/mapper/**/*.xml
-#  global-config:
-#    db-config:
-#     id-type: auto
+server:
+  port: 8000
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: Liu1234567890@@
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+  thymeleaf:
+    redis:
+      host: localhost
+      port: 6379
+    cache:
+      type: redis
+      redis:
+        time-to-live: 3600000
+    session:
+      store-type: redis
 
+
+alibaba:
+  cloud:
+    access-key: LTAI5tMojnJCwYBBhvcg8g67
+    secret-key: 7EkRWJlxhOIayIO9qKzi3h5BUFmlr0
+    oss:
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+
+  application:
+    name: gulimall-product
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+     id-type: auto
+gulimall:
+  thread:
+    core-size: 10
+    max-size: 20
+    keep-alive-time: 300

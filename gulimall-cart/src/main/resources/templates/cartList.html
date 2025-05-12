@@ -23,8 +23,8 @@
 
 					</ul>
 					<ul class="header-right">
-						<li><a th:if="${session.loginUser!=null}">欢迎：[[${session.loginUser==null?'':session.loginUser.nickname}]]</a>
-                            <a href="http://auth.gulimall.com/login.html" th:if="${session.loginUser==null}">欢迎,请登录</a></li>
+						<li><a  th:if="${session.loginUser!=null}">欢迎：[[${session.loginUser==null?'':session.loginUser.nickname}]]</a>
+                            <a  href="http://auth.gulimall.com/login.html" th:if="${session.loginUser==null}">欢迎,请登录</a></li>
 						<li> <a th:if="${session.loginUser==null}" href="http://auth.gulimall.com/reg.html" class="li_2">免费注册</a></li>
 						<li class="spacer"></li>
 						<li><a href="/static/cart/">我的订单</a></li>
@@ -118,7 +118,7 @@
                             </li>
                             <li style="font-weight:bold"><p class="zj" th:text="'￥'+${#numbers.formatDecimal(item.totalPrice,3,2)}">￥22995.00</p></li>
                             <li>
-                                <p>删除</p>
+                                <p class="deleteItemBtu" th:attr="skuId=${item.skuId}">删除</p>
 
                             </li>
                         </ol>
@@ -169,7 +169,7 @@
 				</dl>
 			</div>
 			<div>
-				<button type="button">删除</button>
+				<button type="button" onclick="delCart()">删除</button>
 
 			</div>
 		</div>
@@ -218,7 +218,7 @@
 	<script src="/static/cart/js/index.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		function toTrade() {
-			window.location.href = "http://cart.gmall.com:8087/toTrade";
+			window.location.href = "http://order.gulimall.com/toTrade";
 		}
 
 		function toItem(skuId) {
@@ -774,9 +774,17 @@
             location.href="http://cart.gulimall.com/checkItem?skuId="+skuId+"&check="+(check?1:0);
         })
         $(".countOpsBth").click(function (){
-            let skuId=$(this).parent().attrr("skuId");
+            let skuId=$(this).parent().attr("skuId");
             let num=$(this).parent().find(".countOpsNum").text();
             location.href="http://cart.gulimall.com/countItem?skuId="+skuId+"&num="+num;
         })
+        let deleteId=0;
+       function delCart(){
+           location.href="http://cart.gulimall.com/deleteItem?skuId="+deleteId
+       }
+       $(".deleteItemBtu").click(function (){
+           deleteId=$(this).attr("skuId");
+       })
+
 	</script>
 </html>

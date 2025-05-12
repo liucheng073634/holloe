@@ -23,11 +23,7 @@
         <module> gulimall-search</module>
         <module>gulimall-auth-server</module>
         <module>gulimall-cart</module>
-
-
-
-
-    </modules>
+ </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

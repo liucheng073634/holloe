@@ -44,9 +44,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         return new PageUtils(page);
     }
 
+    //  1.检查用户名和手机号是否唯一
     @Override
     public void regist(MemberRegistVo vo) {
         MemberEntity memberEntity = new MemberEntity();
+        // 获取默认会员等级
        MemberLevelEntity   memberLevelEntity=memberLevelDao.getDefaultLevel();
         memberEntity.setLevelId(memberLevelEntity.getId());
         //检查用户名和手机号是否唯一

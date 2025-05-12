@@ -179,5 +179,17 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         return skuItemVo;
     }
 
+    @Override
+    public void remove(Long spuId) {
+        this.remove(new QueryWrapper<SkuInfoEntity>().eq("spu_id",spuId));
+    }
+
+    @Override
+    public List<Long> getBySkuId(Long spuId) {
+        List<Long> skuIds=this.baseMapper.selectBySkuId(spuId);
+        return skuIds;
+    }
+
+
 
 }

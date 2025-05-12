@@ -11,6 +11,12 @@
         <result property="imgSort" column="img_sort"/>
         <result property="defaultImg" column="default_img"/>
     </resultMap>
+    <delete id="deleteImages">
+        delete from pms_sku_images where sku_id =
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 
 
 </mapper>

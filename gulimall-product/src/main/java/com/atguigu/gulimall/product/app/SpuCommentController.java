@@ -29,16 +29,12 @@ import com.atguigu.common.utils.R;
 @RestController
 @RequestMapping("product/spucomment")
 public class SpuCommentController {
-    @Value("${properties.user.name}")
-    private String name;
+
 
     @Autowired
     private SpuCommentService spuCommentService;
 
-    @RequestMapping("/test")
-    public R test(){
-        return R.ok().put("name",name);
-    }
+
 
     /**
      * 列表

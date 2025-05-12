@@ -26,4 +26,9 @@ public class SpuBoundsServiceImpl extends ServiceImpl<SpuBoundsDao, SpuBoundsEnt
         return new PageUtils(page);
     }
 
+    @Override
+    public void remove(Long spuId) {
+        this.remove(new QueryWrapper<SpuBoundsEntity>().eq("spu_id", spuId));
+    }
+
 }

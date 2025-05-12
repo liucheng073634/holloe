@@ -253,6 +253,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
     public List<Long> selectSearchAttrIds(List<Long> attrIds) {
         return this.baseMapper.selectSearchAttrIds(attrIds);
 
+
     }
 
 

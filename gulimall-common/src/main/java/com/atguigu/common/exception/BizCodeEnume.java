@@ -18,7 +18,9 @@ public enum BizCodeEnume {
     CAPTCHA_WRONG_EXCEPTION(20009,"验证码错误"),
     CAPTCHA_NOT_EXIST_EXCEPTION(20010,"验证码不存在"),
     CAPTCHA_EXPIRE_EXCEPTION(20011,"验证码过期"),
-    SESSION_NOT_EXIST_EXCEPTION(20012,"session不存在");
+    SESSION_NOT_EXIST_EXCEPTION(20012,"session不存在"),
+    NO_STOCK_EXCEPTION(21000,"没有库存了");
+
     private int  code;
     private String msg;
     BizCodeEnume(int code,String msg){
