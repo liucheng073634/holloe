@@ -9,11 +9,7 @@ spring:
       discovery:
         server-addr: localhost:8848
 
-#      # 发送短信接口的配置
-#      sms:
-#        host: http://dingxin.market.alicloudapi.com
-#        path: /dx/sendSms
-#        appcode: #
+
     sentinel:
       transport:
         dashboard: localhost:8080
