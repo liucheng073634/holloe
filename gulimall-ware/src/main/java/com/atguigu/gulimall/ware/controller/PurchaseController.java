@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.atguigu.gulimall.ware.vo.MergeVo;
 import com.atguigu.gulimall.ware.vo.PurchaseDoneVo;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +37,7 @@ public class PurchaseController {
         purchaseService.done(doneVo);
         return R.ok();
     }
+
 
 
     @PostMapping("/received")

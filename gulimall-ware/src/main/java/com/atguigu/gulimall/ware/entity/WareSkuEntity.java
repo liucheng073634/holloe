@@ -45,4 +45,5 @@ public class WareSkuEntity implements Serializable {
 	 */
 	private Integer stockLocked;
 
+
 }

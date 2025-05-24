@@ -113,7 +113,7 @@ public class LoginController {
 
 
     }
-
+    //登录
     @PostMapping("/login")
     public String login(UserLoginVo userLoginVo, RedirectAttributes model, HttpSession session){
         R login = memberFeignService.login(userLoginVo);

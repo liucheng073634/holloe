@@ -1,6 +1,6 @@
 spring:
   zipkin:
-    base-url: http://localhost:9411
+    base-url: http://192.168.100.100:9411
     sender:
       type: web
     discovery-client-enabled: false
@@ -28,6 +28,8 @@ spring:
           filters:
             - RewritePath=/api/third/(?<segment>/?.*),/$\{segment}
 
+
+
         #将路径为Path=/api/product转发gulimall-product微服务
         - id: product_route
           uri: lb://gulimall-product
@@ -35,6 +37,8 @@ spring:
             - Path=/api/product/**
           filters:
             - RewritePath=/api/(?<segment>/?.*),/$\{segment}
+
+
 
         #将路径为Path=/api/member/**转发至会员服务
         - id: gulimall-member
@@ -93,6 +97,20 @@ spring:
           predicates:
             - Host=order.gulimall.com
 
+              #member服务转发
+        - id: gulimall_member_route
+          uri: lb://gulimall-member
+          predicates:
+            - Host=member.gulimall.com
+
+        - id: gulimall_alipay_route
+          uri: lb://gulimall-alipay
+          predicates:
+            - Host=pay.gulimall.com
+          filters:
+            - RewritePath=/(?<segment>/?.*),/$\{segment}
+
+
         #将主机地址为seckill.gulimall.com转发至gulimall-seckill
         - id: gulimall_seckill_host
           uri: lb://gulimall-seckill
@@ -104,6 +122,7 @@ spring:
           uri: lb://gulimall-product
           predicates:
             - Host=**.gulimall.com
+
     sentinel:
       transport:
         dashboard: localhost:8080

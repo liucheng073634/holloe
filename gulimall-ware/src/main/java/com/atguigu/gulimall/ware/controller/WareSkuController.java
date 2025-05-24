@@ -6,9 +6,11 @@ import java.util.Map;
 
 
 import com.atguigu.common.exception.BizCodeEnume;
+import com.atguigu.common.exception.NoStockException;
 import com.atguigu.gulimall.ware.vo.LockStockResult;
 import com.atguigu.gulimall.ware.vo.SkuHasStockVo;
 import com.atguigu.gulimall.ware.vo.WareSkuLockVo;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,8 @@ import com.atguigu.common.utils.R;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+
     //  锁定库存
     @PostMapping("/lock/order")
     public R orderLockStock(@RequestBody WareSkuLockVo vo){
@@ -38,7 +42,7 @@ public class WareSkuController {
        try {
            Boolean stock = wareSkuService.orderLockStock(vo);
          return R.ok();
-       }catch (Exception e){
+       }catch (NoStockException e){
          return R.error(BizCodeEnume.NO_STOCK_EXCEPTION.getCode(),BizCodeEnume.NO_STOCK_EXCEPTION.getMsg());
        }
 

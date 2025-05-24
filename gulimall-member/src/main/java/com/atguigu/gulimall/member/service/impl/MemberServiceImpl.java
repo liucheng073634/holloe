@@ -94,6 +94,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         if(memberEntity==null){
         return null;
         }else{
+            //  密码匹配
             String password1 = memberEntity.getPassword();
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             boolean matches = bCryptPasswordEncoder.matches(password, password1);

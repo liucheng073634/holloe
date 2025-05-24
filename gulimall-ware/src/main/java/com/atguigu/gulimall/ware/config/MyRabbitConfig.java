@@ -14,19 +14,11 @@ import java.util.HashMap;
 @Configuration
 public class MyRabbitConfig {
 
-
-
-    @Bean
-    public MessageConverter messageConverter() {
-
-        return new Jackson2JsonMessageConverter();
-    }
-
-    @RabbitListener(queues = "stock.release.stock.queue")
-    public void handle(Message message) {
-
-
-    }
+//    @RabbitListener(queues = "stock.release.stock.queue")
+//    public void handle(Message message) {
+//
+//
+//    }
 
     @Bean
     public Exchange stockEventExchange() {
@@ -37,7 +29,7 @@ public class MyRabbitConfig {
     @Bean
     public Queue stockRelaeaseStockQuery() {
 
-      return new Queue("stock.release.stock.queue",true,false,false);
+      return new Queue("stock.release.stock.queue",true,false,false,null);
     }
 
     @Bean
@@ -51,7 +43,7 @@ public class MyRabbitConfig {
         HashMap<String, Object> args = new HashMap<>();
         args.put("x-dead-letter-exchange","stock-event-exchange");
         args.put("x-dead-letter-routing-key","stock.release");
-        args.put("x-message-ttl",120000);
+        args.put("x-message-ttl",60000);
         return new Queue("stock.delay.queue",true,false,false,args);
     }
 
