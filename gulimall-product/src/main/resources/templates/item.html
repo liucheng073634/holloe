@@ -506,10 +506,21 @@
                         <li>
                             <span>￥</span>
                             <!--保留两位小数-->
-                            <span th:text="${#numbers.formatDecimal(item.info.price,3,2)}">4499.00</span>
+                            <span th:if="${#dates.createNow().getTime() < item.seckillInfo?.startTime || #dates.createNow().getTime() > item.seckillInfo?.endTime || item.seckillInfo==null}" th:text="${#numbers.formatDecimal(item.info.price,3,2)}">4499.00</span>
+
+                            <span th:if="${#dates.createNow().getTime() >= item.seckillInfo?.startTime && #dates.createNow().getTime() <= item.seckillInfo?.endTime}">
+                              <s style="text-decoration: line-through; color: darkgray" th:text="${#numbers.formatDecimal(item.info.price,3,2)}" ></s> [[${#numbers.formatDecimal(item.seckillInfo.seckillPrice,1,2)}]]
+                            </span>
                         </li>
-                        <li>
-                            预约享资格
+                        <li style="color: red" th:if="${item.seckillInfo!=null}">
+                            <span th:if="${#dates.createNow().getTime() < item.seckillInfo?.startTime ||  item?.seckillInfo==null}">
+                                商品将会在[[${#dates.format(new java.util.Date(item.seckillInfo.startTime),"yyyy-MM-dd HH:mm:ss")}]]进行秒杀
+                                </span>
+                            <span th:if="${#dates.createNow().getTime() >= item.seckillInfo?.startTime && #dates.createNow().getTime() <= item.seckillInfo?.endTime}">
+                                商品正在进行秒杀
+                                </span>
+
+
                         </li>
                         <li>
                             <a href="/static/item/">
@@ -630,7 +641,14 @@
 
                         </div>
                     </div>
-                    <div class="box-btns-two">
+                    <div class="box-btns-two" th:if="${#dates.createNow().getTime() >= item.seckillInfo?.startTime && #dates.createNow().getTime() <= item.seckillInfo?.endTime}">
+                        <a  href="#" id="secKillA"
+                           th:attr="skuId=${item.info.skuId},sessionId=${item.seckillInfo?.promotionSessionId},code=${item.seckillInfo?.randomCode}">
+                            立即抢购
+                        </a>
+                    </div>
+
+                    <div class="box-btns-two" th:if="${#dates.createNow().getTime() < item.seckillInfo?.startTime || #dates.createNow().getTime() > item.seckillInfo?.endTime}">
                         <a href="#" id="addToCartA" th:attr="skuId=${item.info.skuId}">
                             加入购物车
                         </a>
@@ -1289,6 +1307,26 @@
         location.href="http://cart.gulimall.com/addToCart?skuId="+skuId+"&num="+num;
         return false;
     });
+
+    $("#secKillA").click(function(){
+        var isLogin = [[${session.loginUser!=null}]]
+        if(isLogin){
+            var num = $("#numInput").val();
+            var key=$(this).attr("code");
+            var killId=$(this).attr("sessionId")+"_"+$(this).attr("skuId");
+            location.href="http://seckill.gulimall.com/seckill?killId="+killId+"&key="+key+"&num="+num;
+
+        }else {
+            alert("请先登录");
+            location.href="http://auth.gulimall.com/login.html";
+        }
+        return false;
+
+    });
+
+
+
+
 </script>
 
 </html>

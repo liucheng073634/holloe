@@ -1,6 +1,7 @@
 package com.atguigu.gulimall.coupon.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -30,6 +31,13 @@ import com.atguigu.common.utils.R;
 public class SeckillSessionController {
     @Autowired
     private SeckillSessionService seckillSessionService;
+
+
+    @RequestMapping("/latest3Days")
+    public R getLatest3Days(){
+        List<SeckillSessionEntity> seckillSessions=seckillSessionService.uploadSeckillSkuLatest3Days();
+        return R.ok().setData(seckillSessions);
+    }
 
     /**
      * 列表

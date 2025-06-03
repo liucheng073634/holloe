@@ -19,7 +19,12 @@ public enum BizCodeEnume {
     CAPTCHA_NOT_EXIST_EXCEPTION(20010,"验证码不存在"),
     CAPTCHA_EXPIRE_EXCEPTION(20011,"验证码过期"),
     SESSION_NOT_EXIST_EXCEPTION(20012,"session不存在"),
-    NO_STOCK_EXCEPTION(21000,"没有库存了");
+    NO_STOCK_EXCEPTION(21000,"没有库存了"),
+    TOO_MANY_REQUESTS(21001,"请求流量过大，请稍后再试"),
+    UPLOAD_FILE_EXCEPTION(21002,"上传文件异常"),
+    BRAND_EXIST_EXCEPTION(22001,"品牌已存在"),
+    BRAND_ASSOCIATION_PRODUCT_EXCEPTION(22002,"品牌关联了商品"),
+    BRAND_ASSOCIATION_CATEGORY_EXCEPTION(22003,"品牌关联了分类");
 
     private int  code;
     private String msg;

@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public interface SeckillSkuRelationService extends IService<SeckillSkuRelationEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    PageUtils
+    queryPage(Map<String, Object> params);
 }
 

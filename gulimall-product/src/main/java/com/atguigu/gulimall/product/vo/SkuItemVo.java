@@ -3,6 +3,7 @@ package com.atguigu.gulimall.product.vo;
 import com.atguigu.gulimall.product.entity.SkuImagesEntity;
 import com.atguigu.gulimall.product.entity.SkuInfoEntity;
 import com.atguigu.gulimall.product.entity.SpuInfoDescEntity;
+import com.atguigu.gulimall.product.feign.SeckillFeignService;
 import lombok.Data;
 import lombok.ToString;
 
@@ -23,7 +24,7 @@ public class SkuItemVo {
 
     List<SpuItemAttrGroupVo> groupAttrs;
 
-
+    SeckillInfoVo seckillInfo;
 
 
 
