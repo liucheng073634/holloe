@@ -16,6 +16,7 @@ import com.atguigu.gulimall.product.vo.SpuItemAttrGroupVo;
 import io.swagger.annotations.Authorization;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -54,6 +55,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
     @Autowired
     ThreadPoolExecutor executor;
+
 
     @Autowired
     SeckillFeignService seckillFeignService;
